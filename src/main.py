@@ -1,4 +1,5 @@
 import pygame
+import pygame.freetype
 
 class GameEngine:
 
@@ -10,6 +11,9 @@ class GameEngine:
 
     def __init__(self):
         pygame.init()
+
+        # Load font(s)
+        self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
     
     def new_game(self):
         self.running = True
@@ -29,10 +33,14 @@ class GameEngine:
                 self.running = False
     
     def tick(self):
-     self.mouse_pos = pygame.mouse.get_pos
+        self.mouse_pos = pygame.mouse.get_pos
+
+    def draw_text(self, x, y, text):
+        self.font.render_to(self.screen, (x, y), text, (0, 0, 0))
     
     def draw(self):
         self.screen.fill(self.color)
+        self.draw_text(50, 50, "Hello World!")
         pygame.display.flip()
 
 game1 = GameEngine()
