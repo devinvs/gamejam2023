@@ -1,49 +1,77 @@
 import pygame
 
-
+# The entity component system has no concept of a grid. Every object
+# is placed and referred to in world coordinates. Any handling of
+# the grid should be done at a layer that is above the ecs
 class ECS:
     next_id = 0
+    # list of ids to delete at next flush
+    delete = set([])
 
+    #
     # component arrays
+    #
+
+    # The type of object that we are working with
+    types = []
+    # The x,y position in world coordinates
     positions = []
+    # the width and height of the object
+    geometries = []
+    # The x,y velocity of the object
     velocities = []
+    # A set of the objects that we have collided with
+    collisions = []
+    # Health
+    healths = []
+    # Damage
+    damages = []
 
     def __init__(self):
         return
 
+    # Return a generator over all our ids
+    def ids(self):
+        return range(len(self.types))
+
     # Create a new entity where each component is set to None,
     # returns the index into the component arrays of that entity
     def new_entity(self):
+        self.types.append(None)
         self.positions.append(None)
+        self.geometries.append(None)
         self.velocities.append(None)
+        self.collisions.append(None)
+        self.healths.append(None)
+        self.damages.append(None)
 
         me = self.next_id
         self.next_id += 1
         return me
 
-    # Delete an entity
+    # Delete an entity. Just overwrites with Nones and adds to
+    # the delete list, to be properly deleted on a flush call
     def remove_entity(self, id):
-        # Need to think a bit about the lifetimes of our objects...
-        # for now just set to nones
-        positions[id] = None
-        velocities[id] = None
+        self.types[id] = None
+        self.positions[id] = None
+        self.geometries[id] = None
+        self.velocities[id] = None
+        self.collisions[id] = None
+        self.healths[id] = None
+        self.damages[id] = None
 
-    #
-    # Functions to add specific types of entities maybe
-    #
+        self.delete.add(id)
 
-    # just an example, probably remove
-    def add_stationary(self, x, y):
-        id = self.new_entity()
-        self.positions[id] = pygame.Vector2(x, y)
-        return id
+    # Actually remove deleted entities from their componenet lists
+    def flush(self):
+        for id in self.delete:
+            del types[id]
+            del positions[id]
+            del geometries[id]
+            del velocities[id]
+            del collisions[id]
+            del healths[id]
+            del damages[id]
 
-
-# An example system that calculates the new position after t seconds
-def position_system(ecs, t):
-    for i in range(len(ecs.positions)):
-        pos = ecs.positions[i]
-        vel = ecs.velocities[i]
-
-        ecs.positions[i] = pos + vel * t
-
+        self.delete.clear()
+       
