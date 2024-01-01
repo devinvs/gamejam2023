@@ -16,13 +16,16 @@ def click_play(engine):
     engine.paused = False
 
 def click_grid(engine):
-    if engine.unit_bought is not None and engine.entity_map[engine.mouse_pos[1] // 40][engine.mouse_pos[0] // 40] is None:
+    x = engine.mouse_pos[0]
+    y = engine.mouse_pos[1]
 
+    if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None or True:
+        
         id = engine.ecs.new_entity()
-        engine.ecs.positions[id] = pygame.Rect(engine.mouse_pos[0] - engine.mouse_pos[0] % 40, engine.mouse_pos[1] - engine.mouse_pos[1] % 40, 40.0, 40.0)
+        engine.ecs.positions[id] = pygame.Rect(x - x % 40 + 5, y - y % 40 + 5, 30.0, 30.0)
         engine.ecs.colors[id] = (255, 0, 0)
         
-        engine.entity_map[engine.mouse_pos[1] // 40][engine.mouse_pos[0] // 40] = id
+        engine.entity_map[y // 40][x // 40] = id
         engine.unit_bought = None
     
 
