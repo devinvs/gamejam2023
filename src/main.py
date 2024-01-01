@@ -30,7 +30,7 @@ victory_screen = []
 
 
 class GameEngine:
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((800, 600), pygame.SCALED | pygame.RESIZABLE)
     clock = pygame.time.Clock()
     mouse_pos = None
     running = True
@@ -95,9 +95,24 @@ class GameEngine:
     # Rendering helpers and main function
     def draw_text(self, x, y, text, color):
         self.font.render_to(self.screen, (x, y), text, color)
+
+    def draw_grid(self):
+        w = 40
+        nc = 800 // w
+        nr = 600 // w
+
+        for i in range(nr+1):
+            y = i*w
+            pygame.draw.line(self.screen, (255, 255, 255), (0, y), (800, y))
+
+        for i in range(nc+1):
+            x = i*w
+            pygame.draw.line(self.screen, (255, 255, 255), (x, 0), (x, 600))
+        
  
     def draw(self):
         self.screen.fill((0, 0, 0))
+        self.draw_grid()
 
         for id in self.ecs.ids():
             rect = self.ecs.positions[id]
