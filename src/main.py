@@ -22,8 +22,8 @@ def click_grid(engine):
     if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None:
         
         id = engine.ecs.new_entity()
-        engine.ecs.geometries[id] = pygame.Rect(50, 50, 30.0, 30.0)
         engine.ecs.positions[id] = pygame.Vector2(x - x % 40 + 5, y - y % 40 + 5)
+        engine.ecs.geometries[id] = pygame.Rect(0, 0, 30.0, 30.0)
         engine.ecs.colors[id] = (255, 0, 0)
         
         engine.entity_map[y // 40][x // 40] = id
@@ -37,7 +37,8 @@ def click_unit(unit):
     return inner
 
 title_screen = [
-    (pygame.Rect(0, 0, 200, 20), (255, 0, 0), "GameNameHere", None),
+    (pygame.Rect(0, 0, 800, 600), (200, 200, 200), None, None),
+    (pygame.Rect(200, 200, 200, 20), (255, 0, 0), "GameNameHere", None),
     (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play)
 ]
 
@@ -48,9 +49,10 @@ pause_screen = [
 game_screen = [
     (pygame.Rect(0, 0, 800, 520), None, None, click_grid),
     (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "You have no money :_(", None),
-    (pygame.Rect(740, 540, 40, 40), (255, 0, 0), "3", click_unit(3)),
-    (pygame.Rect(680, 540, 40, 40), (0, 255, 0), "2", click_unit(2)),
-    (pygame.Rect(620, 540, 40, 40), (0, 0, 255), "1", click_unit(1))
+    (pygame.Rect(740, 540, 40, 40), (255, 0, 0), "4", click_unit("ICE")),
+    (pygame.Rect(680, 540, 40, 40), (0, 255, 0), "3", click_unit("FIRE")),
+    (pygame.Rect(620, 540, 40, 40), (0, 0, 255), "2", click_unit("HEAVY")),
+    (pygame.Rect(560, 540, 40, 40), (0, 255, 255), "1", click_unit("TURRET"))
 ]
 
 
@@ -71,8 +73,8 @@ class GameEngine:
     def add_conveyor(self, type, x, y):
         id = self.ecs.new_entity()
         self.ecs.types[id] = type
-        self.ecs.positions[id] = pygame.Vector2(x, y)
-        self.ecs.geometries[id] = pygame.Rect(x, y, 20, 20)
+        self.ecs.positions[id] = pygame.Vector2(x * 40, y * 40)
+        self.ecs.geometries[id] = pygame.Rect(x * 40, y * 40, 40, 40)
         self.ecs.colors[id] = (255, 0, 0)
         self.ecs.collidable[id] = True
 
@@ -82,17 +84,23 @@ class GameEngine:
         self.ecs = ECS()
         # Load entitities for testing (optional)
         
-        self.add_conveyor(EntityType.CONV_RIGHT, 80, 80)
-        self.add_conveyor(EntityType.CONV_DOWN, 100, 80)
-        self.add_conveyor(EntityType.CONV_LEFT, 100, 100)
-        self.add_conveyor(EntityType.CONV_UP, 80, 100)
+        self.add_conveyor(EntityType.CONV_RIGHT, 0, 4)
+        self.add_conveyor(EntityType.CONV_RIGHT, 1, 4)
+        self.add_conveyor(EntityType.CONV_RIGHT, 2, 4)
+        self.add_conveyor(EntityType.CONV_RIGHT, 3, 4)
+        self.add_conveyor(EntityType.CONV_RIGHT, 4, 4)
+        self.add_conveyor(EntityType.CONV_DOWN, 5, 4)
+        self.add_conveyor(EntityType.CONV_DOWN, 5, 5)
+        self.add_conveyor(EntityType.CONV_DOWN, 5, 6)
+        self.add_conveyor(EntityType.CONV_LEFT, 5, 7)
+        self.add_conveyor(EntityType.CONV_UP, 10, 10)
 
 
         # creature
         id = self.ecs.new_entity()
         self.ecs.types[id] = EntityType.CREATURE
-        self.ecs.positions[id] = pygame.Vector2(80.0, 80.0)
-        self.ecs.geometries[id] = pygame.Rect(80.0, 90.0, 10.0, 10.0)
+        self.ecs.positions[id] = pygame.Vector2(0.0, 165.0)
+        self.ecs.geometries[id] = pygame.Rect(0.0, 165.0, 30.0, 30.0)
         self.ecs.colors[id] = (0, 0, 255)
         self.ecs.velocities[id] = pygame.math.Vector2(0, 0)
         self.ecs.collidable[id] = True
