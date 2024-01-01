@@ -22,7 +22,8 @@ def click_grid(engine):
     if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None:
         
         id = engine.ecs.new_entity()
-        engine.ecs.positions[id] = pygame.Rect(x - x % 40 + 5, y - y % 40 + 5, 30.0, 30.0)
+        engine.ecs.geometries[id] = pygame.Rect(50, 50, 30.0, 30.0)
+        engine.ecs.positions[id] = pygame.Vector2(x - x % 40 + 5, y - y % 40 + 5)
         engine.ecs.colors[id] = (255, 0, 0)
         
         engine.entity_map[y // 40][x // 40] = id
