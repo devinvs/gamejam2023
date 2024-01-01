@@ -1,16 +1,20 @@
 import pygame
 import pygame.freetype
+import pygame.draw
+
+from ecs import ECS
 
 class GameEngine:
 
     screen = pygame.display.set_mode((1280, 720))
     clock = pygame.time.Clock()
     running = False
-    color = pygame.Color(0,0,0,255)
     mouse_pos = None
 
     def __init__(self):
         pygame.init()
+
+        self.ecs = ECS()
 
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
@@ -35,12 +39,22 @@ class GameEngine:
     def tick(self):
         self.mouse_pos = pygame.mouse.get_pos
 
+    # Rendering helpers and main function
     def draw_text(self, x, y, text):
         self.font.render_to(self.screen, (x, y), text, (0, 0, 0))
     
     def draw(self):
-        self.screen.fill(self.color)
-        self.draw_text(50, 50, "Hello World!")
+        self.screen.fill((0, 0, 0))
+
+        for id in self.ecs.ids():
+            rect = self.ecs.positions[id]
+            color = self.colors[id]
+
+            if rect is None or color is None:
+                continue
+
+            pygame.draw.rect(self.screen, color, rect)
+        
         pygame.display.flip()
 
 game1 = GameEngine()
