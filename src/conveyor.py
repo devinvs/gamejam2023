@@ -1,7 +1,12 @@
 import math
-from entity_types import EntityType
 
 CONV_VEL = 40
+
+class Conveyor:
+    LEFT = 1
+    RIGHT = 2
+    UP = 3
+    DOWN = 4
 
 # If a creature is on top of a conveyor belt
 # it receives a velocity that moves it along
@@ -12,11 +17,11 @@ CONV_VEL = 40
 # it is stopped.
 def conveyor_system(ecs):
     for id in ecs.ids():
-        type = ecs.types[id]
         cols = ecs.collisions[id]
+        dir = ecs.conveyors[id]
 
-        # We must be a conveyor belt
-        if type is None or not type.is_conveyor():
+        # we must be a conveyor
+        if dir is None or cols is None:
             continue
 
         conv_pos = ecs.geometries[id]
@@ -24,8 +29,9 @@ def conveyor_system(ecs):
         centery = conv_pos.y + conv_pos.h/2
 
         # Move all creatures on the conveyor belt
+        # A creature has health, so use that to identifier them
         for other in cols:
-            if not ecs.types[other].is_creature():
+            if ecs.healths[other] is None:
                 continue
 
             # We keep moving in the orthogonal direction until
@@ -35,7 +41,7 @@ def conveyor_system(ecs):
             ocentery = other_pos.y + other_pos.h/2
 
             if ecs.velocities[other].x != 0 or ecs.velocities[other].y != 0:
-                if type==EntityType.CONV_RIGHT or type==EntityType.CONV_LEFT:
+                if dir==Conveyor.RIGHT or dir==Conveyor.LEFT:
                     # y is orthogonal
                     if abs(centery-ocentery) > 2:
                         continue
@@ -46,16 +52,16 @@ def conveyor_system(ecs):
 
            
             # We are a creature on top of a conveyor belt
-            if type==EntityType.CONV_RIGHT:
+            if dir==Conveyor.RIGHT:
                 ecs.velocities[other].x = CONV_VEL
                 ecs.velocities[other].y = 0
-            if type==EntityType.CONV_LEFT:
+            if dir==Conveyor.LEFT:
                 ecs.velocities[other].x = -CONV_VEL
                 ecs.velocities[other].y = 0
-            if type==EntityType.CONV_UP:
+            if dir==Conveyor.UP:
                 ecs.velocities[other].y = -CONV_VEL
                 ecs.velocities[other].x = 0
-            if type==EntityType.CONV_DOWN:
+            if dir==Conveyor.DOWN:
                 ecs.velocities[other].y = CONV_VEL
                 ecs.velocities[other].x = 0
 

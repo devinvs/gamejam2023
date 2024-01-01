@@ -1,5 +1,7 @@
 import pygame
 
+from turret import Weapon
+
 # The entity component system has no concept of a grid. Every object
 # is placed and referred to in world coordinates. Any handling of
 # the grid should be done at a layer that is above the ecs
@@ -12,8 +14,6 @@ class ECS:
     # component arrays
     #
 
-    # The type of object that we are working with
-    types = []
     # The width and height of the object and x,y position in world coordinates
     positions = []
     # The color of the rectangle
@@ -26,22 +26,25 @@ class ECS:
     collisions = []
     # Health
     healths = []
-    # Damage
+    # Damage, basically only for bullets
     damages = []
     #Collidable
     collidable = []
+    # Conveyor Belt directions
+    conveyors = []
+    # All the weapon stats
+    weapons = []
 
     def __init__(self):
         return
 
     # Return a generator over all our ids
     def ids(self):
-        return range(len(self.types))
+        return range(len(self.positions))
 
     # Create a new entity where each component is set to None,
     # returns the index into the component arrays of that entity
     def new_entity(self):
-        self.types.append(None)
         self.positions.append(None)
         self.colors.append(None)
         self.geometries.append(None)
@@ -50,6 +53,8 @@ class ECS:
         self.healths.append(None)
         self.damages.append(None)
         self.collidable.append(False)
+        self.conveyors.append(None)
+        self.weapons.append(None)
 
         me = self.next_id
         self.next_id += 1
@@ -58,7 +63,6 @@ class ECS:
     # Delete an entity. Just overwrites with Nones and adds to
     # the delete list, to be properly deleted on a flush call
     def remove_entity(self, id):
-        self.types[id] = None
         self.positions[id] = None
         self.colors[id] = None
         self.geometries = None
@@ -67,21 +71,62 @@ class ECS:
         self.healths[id] = None
         self.damages[id] = None
         self.collidable[id] = False
+        self.conveyors[id] = None
+        self.weapons[id] = None
 
         self.delete.add(id)
 
-    # Actually remove deleted entities from their componenet lists
-    def flush(self):
-        for id in self.delete:
-            del self.types[id]
-            del self.positions[id]
-            del self.colors[id]
-            del self.geometries[id]
-            del self.velocities[id]
-            del self.collisions[id]
-            del self.healths[id]
-            del self.damages[id]
-            del self.collidable[id]
+    def add_conveyor(self, x, y, dir):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 20, 20)
+        self.colors[id] = (255, 0, 0)
+        self.collidable[id] = True
+        self.conveyors[id] = dir
 
-        self.delete.clear()
-       
+    def add_creature(self, x, y, health):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 10.0, 10.0)
+        self.colors[id] = (0, 0, 255)
+        self.velocities[id] = pygame.math.Vector2(0, 0)
+        self.collidable[id] = True
+        self.healths[id] = health
+        
+    def add_bullet(self, x, y, vx, vy, dmg):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
+        self.colors[id] = (0, 255, 0)
+        self.velocities[id] = pygame.math.Vector2(vx, vy)
+        self.collidable[id] = True
+        self.damages[id] = dmg
+
+    def add_turret(self, x, y):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
+        self.colors[id] = (255, 255, 0)
+        self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+
+    def add_heavy(self, x, y):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
+        self.colors[id] = (255, 255, 0)
+        self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+
+    def add_fire(self, x, y):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
+        self.colors[id] = (255, 255, 0)
+        self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+
+    def add_ice(self, x, y):
+        id = self.new_entity()
+        self.positions[id] = pygame.Vector2(x, y)
+        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
+        self.colors[id] = (255, 255, 0)
+        self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+

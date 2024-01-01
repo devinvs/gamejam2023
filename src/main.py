@@ -3,8 +3,7 @@ import pygame
 
 from ecs import ECS
 from physics import position_system, collision_system
-from conveyor import conveyor_system
-from entity_types import EntityType
+from conveyor import conveyor_system, Conveyor
 
 
 # Here's a fun way to do UI:
@@ -70,40 +69,29 @@ class GameEngine:
 
     ui = title_screen
 
-    def add_conveyor(self, type, x, y):
-        id = self.ecs.new_entity()
-        self.ecs.types[id] = type
-        self.ecs.positions[id] = pygame.Vector2(x * 40, y * 40)
-        self.ecs.geometries[id] = pygame.Rect(x * 40, y * 40, 40, 40)
-        self.ecs.colors[id] = (255, 0, 0)
-        self.ecs.collidable[id] = True
-
     def __init__(self):
         pygame.init()
 
         self.ecs = ECS()
         # Load entitities for testing (optional)
         
-        self.add_conveyor(EntityType.CONV_RIGHT, 0, 4)
-        self.add_conveyor(EntityType.CONV_RIGHT, 1, 4)
-        self.add_conveyor(EntityType.CONV_RIGHT, 2, 4)
-        self.add_conveyor(EntityType.CONV_RIGHT, 3, 4)
-        self.add_conveyor(EntityType.CONV_RIGHT, 4, 4)
-        self.add_conveyor(EntityType.CONV_DOWN, 5, 4)
-        self.add_conveyor(EntityType.CONV_DOWN, 5, 5)
-        self.add_conveyor(EntityType.CONV_DOWN, 5, 6)
-        self.add_conveyor(EntityType.CONV_LEFT, 5, 7)
-        self.add_conveyor(EntityType.CONV_UP, 10, 10)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 0, 4)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 1, 4)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 2, 4)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 3, 4)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 4, 4)
+        # self.add_conveyor(EntityType.CONV_DOWN, 5, 4)
+        # self.add_conveyor(EntityType.CONV_DOWN, 5, 5)
+        # self.add_conveyor(EntityType.CONV_DOWN, 5, 6)
+        # self.add_conveyor(EntityType.CONV_LEFT, 5, 7)
+        # self.add_conveyor(EntityType.CONV_UP, 10, 10)
 
+        self.ecs.add_conveyor(80, 80, Conveyor.RIGHT)
+        # self.ecs.add_conveyor(100, 80, Conveyor.DOWN)
+        # self.ecs.add_conveyor(100, 100, Conveyor.LEFT)
+        # self.ecs.add_conveyor(80, 100, Conveyor.UP)
 
-        # creature
-        id = self.ecs.new_entity()
-        self.ecs.types[id] = EntityType.CREATURE
-        self.ecs.positions[id] = pygame.Vector2(0.0, 165.0)
-        self.ecs.geometries[id] = pygame.Rect(0.0, 165.0, 30.0, 30.0)
-        self.ecs.colors[id] = (0, 0, 255)
-        self.ecs.velocities[id] = pygame.math.Vector2(0, 0)
-        self.ecs.collidable[id] = True
+        self.ecs.add_creature(85, 85, 10)
         
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
