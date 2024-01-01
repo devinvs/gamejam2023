@@ -4,6 +4,7 @@ import pygame
 from ecs import ECS
 from physics import position_system, collision_system
 from conveyor import conveyor_system, Conveyor
+from creatures import creature_system
 
 
 # Here's a fun way to do UI:
@@ -133,6 +134,7 @@ class GameEngine:
     def tick(self):
         t = self.clock.tick() / 1000
         if not self.paused:
+            creature_system(self.ecs)
             position_system(self.ecs, t)
             collision_system(self.ecs)
             conveyor_system(self.ecs)
