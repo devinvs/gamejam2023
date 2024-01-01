@@ -32,7 +32,6 @@ class GameEngine:
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.color.r += 5
                 self.mouse_pos = pygame.mouse.get_pos()
                 print(self.mouse_pos)
             if event.type == pygame.QUIT:
