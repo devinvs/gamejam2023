@@ -69,21 +69,20 @@ class GameEngine:
         self.ecs = ECS()
         # Load entitities for testing (optional)
         
-        # self.add_conveyor(EntityType.CONV_RIGHT, 80, 80)
-        # self.add_conveyor(EntityType.CONV_DOWN, 100, 80)
-        # self.add_conveyor(EntityType.CONV_LEFT, 100, 100)
-        # self.add_conveyor(EntityType.CONV_UP, 80, 100)
+        self.add_conveyor(EntityType.CONV_RIGHT, 80, 80)
+        self.add_conveyor(EntityType.CONV_DOWN, 100, 80)
+        self.add_conveyor(EntityType.CONV_LEFT, 100, 100)
+        self.add_conveyor(EntityType.CONV_UP, 80, 100)
 
 
         # creature
-        # id = self.ecs.new_entity()
-        # self.ecs.types[id] = EntityType.CREATURE
-        # self.ecs.positions[id] = pygame.Vector2(80.0, 80.0)
-        # self.ecs.geometries[id] = pygame.Rect(80.0, 80.0, 10.0, 10.0)
-        # self.ecs.colors[id] = (0, 0, 255)
-        # self.ecs.velocities[id] = pygame.math.Vector2(0, 0)
-        # self.ecs.collidable[id] = True
-
+        id = self.ecs.new_entity()
+        self.ecs.types[id] = EntityType.CREATURE
+        self.ecs.positions[id] = pygame.Vector2(80.0, 80.0)
+        self.ecs.geometries[id] = pygame.Rect(80.0, 90.0, 10.0, 10.0)
+        self.ecs.colors[id] = (0, 0, 255)
+        self.ecs.velocities[id] = pygame.math.Vector2(0, 0)
+        self.ecs.collidable[id] = True
         
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
