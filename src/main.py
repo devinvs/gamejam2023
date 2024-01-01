@@ -1,14 +1,42 @@
+from enum import Enum
 import pygame
 
 from ecs import ECS
 from physics import position_system, collision_system
 
-class GameEngine:
 
+# Here's a fun way to do UI:
+# Each screen is just a list of tuples, where each
+# tuple is a rect, a color, some text, and an action!
+
+def click_play(engine):
+    engine.ui = game_screen
+    engine.paused = False
+
+
+title_screen = [
+    (pygame.Rect(0, 0, 200, 20), (255, 0, 0), "GameNameHere", None),
+    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play)
+]
+
+pause_screen = [
+    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "RESUME", click_play)
+]
+
+game_screen = []
+
+
+victory_screen = []
+
+
+class GameEngine:
     screen = pygame.display.set_mode((1280, 720))
     clock = pygame.time.Clock()
-    running = False
     mouse_pos = None
+    running = True
+    paused = True
+
+    ui = title_screen
 
     def __init__(self):
         pygame.init()
@@ -37,18 +65,31 @@ class GameEngine:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_pos = pygame.mouse.get_pos()
-                print(self.mouse_pos)
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                # if the mouse went down and up on the same button thats a click
+                up_pos = pygame.mouse.get_pos()
+
+                for (rect, _, _, action) in self.ui:
+                    if rect.collidepoint(self.mouse_pos) and rect.collidepoint(up_pos):
+                        if action is not None:
+                            action(self)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.ui = pause_screen
+                    self.paused = True
+                
     
     def tick(self):
         self.clock.tick(60)
-        position_system(self.ecs, 1)
-        collision_system(self.ecs)
+        if not self.paused:
+            position_system(self.ecs, 1)
+            collision_system(self.ecs)
     
     # Rendering helpers and main function
-    def draw_text(self, x, y, text):
-        self.font.render_to(self.screen, (x, y), text, (0, 0, 0))
+    def draw_text(self, x, y, text, color):
+        self.font.render_to(self.screen, (x, y), text, color)
  
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -61,8 +102,17 @@ class GameEngine:
                 continue
 
             pygame.draw.rect(self.screen, color, rect)
+
         
+        self.draw_ui()
         pygame.display.flip()
+
+    # Draw the ui of the screen
+    def draw_ui(self):
+        for (rect, color, text, _) in self.ui:
+            pygame.draw.rect(self.screen, color, rect)
+            self.draw_text(rect.x, rect.y, text, (0, 0, 0))
+        
 
 game1 = GameEngine()
 game1.new_game()

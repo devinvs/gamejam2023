@@ -27,7 +27,3 @@ def collision_system(ecs):
 
             if pos.colliderect(pos_other):
                 ecs.collisions[id].add(other)
-                #Test collisions
-                print("Collision Detected")
-                ecs.colors[id] = "Blue"
-                ecs.colors[other] = "Blue"
