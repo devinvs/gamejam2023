@@ -12,7 +12,10 @@ class EntityType(Enum):
     BULLET = 7
 
     def is_conveyor(self):
-        return self == CONV_RIGHT or self == CONV_LEFT or self == CONV_DOWN or self == CONV_UP
+        return (self == EntityType.CONV_RIGHT or
+                self == EntityType.CONV_LEFT or
+                self == EntityType.CONV_DOWN or
+                self == EntityType.CONV_UP)
 
     def is_creature(self):
-        return self == CREATURE
+        return self == EntityType.CREATURE

@@ -3,6 +3,8 @@ import pygame
 
 from ecs import ECS
 from physics import position_system, collision_system
+from conveyor import conveyor_system
+from entity_types import EntityType
 
 
 # Here's a fun way to do UI:
@@ -38,16 +40,33 @@ class GameEngine:
 
     ui = title_screen
 
+    def add_conveyor(self, type, x, y):
+        id = self.ecs.new_entity()
+        self.ecs.types[id] = type
+        self.ecs.positions[id] = pygame.Vector2(x, y)
+        self.ecs.geometries[id] = pygame.Rect(x, y, 20, 20)
+        self.ecs.colors[id] = (255, 0, 0)
+        self.ecs.collidable[id] = True
+
     def __init__(self):
         pygame.init()
 
         self.ecs = ECS()
         # Load entitities for testing (optional)
+        
+        # self.add_conveyor(EntityType.CONV_RIGHT, 80, 80)
+        # self.add_conveyor(EntityType.CONV_DOWN, 100, 80)
+        # self.add_conveyor(EntityType.CONV_LEFT, 100, 100)
+        # self.add_conveyor(EntityType.CONV_UP, 80, 100)
 
-        id = self.ecs.new_entity()
-        self.ecs.positions[id] = pygame.Rect(50.0, 50.0, 200.0, 200.0)
-        self.ecs.colors[id] = (255, 0, 0)
-        self.ecs.velocities[id] = pygame.math.Vector2(5.0, 0.0)
+        # creature
+        # id = self.ecs.new_entity()
+        # self.ecs.types[id] = EntityType.CREATURE
+        # self.ecs.positions[id] = pygame.Vector2(80.0, 80.0)
+        # self.ecs.geometries[id] = pygame.Rect(80.0, 80.0, 10.0, 10.0)
+        # self.ecs.colors[id] = (0, 0, 255)
+        # self.ecs.velocities[id] = pygame.math.Vector2(0, 0)
+        # self.ecs.collidable[id] = True
         
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
@@ -87,10 +106,11 @@ class GameEngine:
                 
     
     def tick(self):
-        self.clock.tick(60)
+        t = self.clock.tick() / 1000
         if not self.paused:
-            position_system(self.ecs, 1)
+            position_system(self.ecs, t)
             collision_system(self.ecs)
+            conveyor_system(self.ecs)
     
     # Rendering helpers and main function
     def draw_text(self, x, y, text, color):
@@ -115,7 +135,7 @@ class GameEngine:
         self.draw_grid()
 
         for id in self.ecs.ids():
-            rect = self.ecs.positions[id]
+            rect = self.ecs.geometries[id]
             color = self.ecs.colors[id]
 
             if rect is None or color is None:

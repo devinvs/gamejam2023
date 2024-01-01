@@ -1,9 +1,7 @@
 import math
-
 from entity_types import EntityType
 
-CONV_VEL = 5
-
+CONV_VEL = 10
 
 # If a creature is on top of a conveyor belt
 # it receives a velocity that moves it along
@@ -21,7 +19,9 @@ def conveyor_system(ecs):
         if not type.is_conveyor():
             continue
 
-        conv_pos = ecs.positions[id]
+        conv_pos = ecs.geometries[id]
+        centerx = conv_pos.x + conv_pos.w/2
+        centery = conv_pos.y + conv_pos.h/2
 
         # Move all creatures on the conveyor belt
         for other in cols:
@@ -34,20 +34,22 @@ def conveyor_system(ecs):
             if type==EntityType.CONV_LEFT:
                 ecs.velocities[other].x = -CONV_VEL
             if type==EntityType.CONV_UP:
-                ecs.velocities[other].y = CONV_VEL
-            if type==EntityType.CONV_DOWN:
                 ecs.velocities[other].y = -CONV_VEL
+            if type==EntityType.CONV_DOWN:
+                ecs.velocities[other].y = CONV_VEL
 
             # We keep moving in the orthogonal direction until
             # we are aligned on the center
-            other_pos = ecs.positions[id]
+            other_pos = ecs.geometries[other]
+            ocenterx = other_pos.x + other_pos.w/2
+            ocentery = other_pos.y + other_pos.h/2
 
             if type==EntityType.CONV_RIGHT or type==EntityType.CONV_LEFT:
                 # y is orthogonal
-                if math.abs(conv_pos.centery-other_pos.centery) < 10:
+                if abs(centery-ocentery) < 2:
                     ecs.velocities[other].y = 0
             else:
                 # x is orthogonal
-                if math.abs(conv_pos.centerx-other_pos.centerx) < 10:
+                if abs(centerx-ocenterx) < 2:
                     ecs.velocities[other].x = 0
 

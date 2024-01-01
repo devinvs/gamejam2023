@@ -18,6 +18,8 @@ class ECS:
     positions = []
     # The color of the rectangle
     colors = []
+    # Geometries (rectangles) Real pixel coordinates of the rectangle
+    geometries = []
     # The x,y velocity of the object
     velocities = []
     # A set of the objects that we have collided with
@@ -42,6 +44,7 @@ class ECS:
         self.types.append(None)
         self.positions.append(None)
         self.colors.append(None)
+        self.geometries.append(None)
         self.velocities.append(None)
         self.collisions.append(None)
         self.healths.append(None)
@@ -58,6 +61,7 @@ class ECS:
         self.types[id] = None
         self.positions[id] = None
         self.colors[id] = None
+        self.geometries = None
         self.velocities[id] = None
         self.collisions[id] = None
         self.healths[id] = None
@@ -72,6 +76,7 @@ class ECS:
             del self.types[id]
             del self.positions[id]
             del self.colors[id]
+            del self.geometries[id]
             del self.velocities[id]
             del self.collisions[id]
             del self.healths[id]
