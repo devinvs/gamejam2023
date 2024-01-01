@@ -1,5 +1,5 @@
 import time
-from dataclass import dataclass
+from dataclasses import dataclass
 import random
 
 @dataclass
@@ -42,5 +42,8 @@ def turret_system(ecs):
         (other, opos) = random.choice(cs)
 
         # Fire!!!
+        v = (opos - pos).normalize()
 
+        ecs.spawn_bullet(pos.x, pos.y, v.x, v.y, w.damage)
+        ecs.weapons[id].last_fired = time.monotonic()
 

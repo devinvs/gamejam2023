@@ -36,7 +36,7 @@ def click_unit(unit):
     return inner
 
 title_screen = [
-    (pygame.Rect(0, 0, 800, 600), (200, 200, 200), None, None),
+    (pygame.Rect(0, 0, 800, 600), (200, 200, 200), "", None),
     (pygame.Rect(200, 200, 200, 20), (255, 0, 0), "GameNameHere", None),
     (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play)
 ]
@@ -46,7 +46,7 @@ pause_screen = [
 ]
 
 game_screen = [
-    (pygame.Rect(0, 0, 800, 520), None, None, click_grid),
+    (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
     (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "You have no money :_(", None),
     (pygame.Rect(740, 540, 40, 40), (255, 0, 0), "4", click_unit("ICE")),
     (pygame.Rect(680, 540, 40, 40), (0, 255, 0), "3", click_unit("FIRE")),
