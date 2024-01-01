@@ -19,3 +19,6 @@ class EntityType(Enum):
 
     def is_creature(self):
         return self == EntityType.CREATURE
+
+    def is_turret(self):
+        return self == EntityType.TURRET
