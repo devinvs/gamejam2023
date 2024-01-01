@@ -14,10 +14,8 @@ class ECS:
 
     # The type of object that we are working with
     types = []
-    # The x,y position in world coordinates
+    # The width and height of the object and x,y position in world coordinates
     positions = []
-    # the width and height of the object
-    geometries = []
     # The x,y velocity of the object
     velocities = []
     # A set of the objects that we have collided with
@@ -26,6 +24,8 @@ class ECS:
     healths = []
     # Damage
     damages = []
+    #Collidable
+    collidable = []
 
     def __init__(self):
         return
@@ -39,11 +39,11 @@ class ECS:
     def new_entity(self):
         self.types.append(None)
         self.positions.append(None)
-        self.geometries.append(None)
         self.velocities.append(None)
         self.collisions.append(None)
         self.healths.append(None)
         self.damages.append(None)
+        self.collidable.append(False)
 
         me = self.next_id
         self.next_id += 1
@@ -54,24 +54,24 @@ class ECS:
     def remove_entity(self, id):
         self.types[id] = None
         self.positions[id] = None
-        self.geometries[id] = None
         self.velocities[id] = None
         self.collisions[id] = None
         self.healths[id] = None
         self.damages[id] = None
+        self.collidable[id] = False
 
         self.delete.add(id)
 
     # Actually remove deleted entities from their componenet lists
     def flush(self):
         for id in self.delete:
-            del types[id]
-            del positions[id]
-            del geometries[id]
-            del velocities[id]
-            del collisions[id]
-            del healths[id]
-            del damages[id]
+            del self.types[id]
+            del self.positions[id]
+            del self.velocities[id]
+            del self.collisions[id]
+            del self.healths[id]
+            del self.damages[id]
+            del self.collidable[id]
 
         self.delete.clear()
        

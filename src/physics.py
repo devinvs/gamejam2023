@@ -1,16 +1,27 @@
+import pygame
+
 def position_system(ecs, t):
-    pass
+    for id in ecs.ids:
+        vel = ecs.velocities[id]
+        pos = ecs.positions[id]
 
-def collision_system(ecs, t):
-    pass
+        if vel is None or pos is None:
+            continue
+        ecs.positions[id].x = pos.x + vel.x * t
+        ecs.positions[id].y = pos.y + vel.y * t
 
+def collision_system(ecs):
+    for id in ecs.ids:
+        if not ecs.collidable[id]:
+            continue
+        
+        pos = ecs.positions[id]
 
-# If a creature is on top of a conveyor belt
-# it receives a velocity that moves it along
-# the direction of the conveyor belt.
-#
-# Additionally if the center of the creature
-# is past the center in the orthogonal direction
-# it is stopped.
-def conveyor_system(ecs):
+        for other in ecs.ids:
+            if not ecs.collidable[other] or id == other:
+                continue
+            
+            pos_other = ecs.positions[other]
 
+            if pos.collidetect(pos_other):
+                ecs.collisions[id].add(pos_other)

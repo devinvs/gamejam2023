@@ -33,16 +33,18 @@ class GameEngine:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.color.r += 5
+                self.mouse_pos = pygame.mouse.get_pos()
+                print(self.mouse_pos)
             if event.type == pygame.QUIT:
                 self.running = False
     
     def tick(self):
-        self.mouse_pos = pygame.mouse.get_pos
-
+        return
+    
     # Rendering helpers and main function
     def draw_text(self, x, y, text):
         self.font.render_to(self.screen, (x, y), text, (0, 0, 0))
-    
+ 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
