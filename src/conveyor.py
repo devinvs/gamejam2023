@@ -16,7 +16,7 @@ def conveyor_system(ecs):
         cols = ecs.collisions[id]
 
         # We must be a conveyor belt
-        if not type.is_conveyor():
+        if type is None or not type.is_conveyor():
             continue
 
         conv_pos = ecs.geometries[id]
