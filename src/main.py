@@ -19,7 +19,7 @@ def click_grid(engine):
     x = engine.mouse_pos[0]
     y = engine.mouse_pos[1]
 
-    if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None or True:
+    if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None:
         
         id = engine.ecs.new_entity()
         engine.ecs.positions[id] = pygame.Rect(x - x % 40 + 5, y - y % 40 + 5, 30.0, 30.0)
@@ -27,7 +27,13 @@ def click_grid(engine):
         
         engine.entity_map[y // 40][x // 40] = id
         engine.unit_bought = None
+
+def click_unit(unit):
+    def inner(engine):
+        engine.unit_bought = unit
+        print(engine.unit_bought)
     
+    return inner
 
 title_screen = [
     (pygame.Rect(0, 0, 200, 20), (255, 0, 0), "GameNameHere", None),
@@ -40,7 +46,10 @@ pause_screen = [
 
 game_screen = [
     (pygame.Rect(0, 0, 800, 520), None, None, click_grid),
-    (pygame.Rect(0, 520, 800, 80), (0, 255, 0), "You have no money :_(", None)
+    (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "You have no money :_(", None),
+    (pygame.Rect(740, 540, 40, 40), (255, 0, 0), "3", click_unit(3)),
+    (pygame.Rect(680, 540, 40, 40), (0, 255, 0), "2", click_unit(2)),
+    (pygame.Rect(620, 540, 40, 40), (0, 0, 255), "1", click_unit(1))
 ]
 
 
