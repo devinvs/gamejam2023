@@ -1,8 +1,7 @@
 import pygame
-import pygame.freetype
-import pygame.draw
 
 from ecs import ECS
+from physics import position_system
 
 class GameEngine:
 
@@ -15,7 +14,13 @@ class GameEngine:
         pygame.init()
 
         self.ecs = ECS()
+        # Load entitities for testing (optional)
 
+        id = self.ecs.new_entity()
+        self.ecs.positions[id] = pygame.Rect(50.0, 50.0, 200.0, 200.0)
+        self.ecs.colors[id] = (255, 0, 0)
+        self.ecs.velocities[id] = pygame.math.Vector2(5.0, 0.0)
+        
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
     
@@ -25,7 +30,6 @@ class GameEngine:
             self.handle_input()
             self.tick()
             self.draw()
-        self.clock.tick(60)  # limits FPS to 60
 
         pygame.quit()
 
@@ -38,7 +42,8 @@ class GameEngine:
                 self.running = False
     
     def tick(self):
-        return
+        self.clock.tick(60)
+        position_system(self.ecs, 1)
     
     # Rendering helpers and main function
     def draw_text(self, x, y, text):
@@ -49,7 +54,7 @@ class GameEngine:
 
         for id in self.ecs.ids():
             rect = self.ecs.positions[id]
-            color = self.colors[id]
+            color = self.ecs.colors[id]
 
             if rect is None or color is None:
                 continue

@@ -1,17 +1,18 @@
 import pygame
 
 def position_system(ecs, t):
-    for id in ecs.ids:
+    for id in ecs.ids():
         vel = ecs.velocities[id]
         pos = ecs.positions[id]
 
         if vel is None or pos is None:
             continue
+
         ecs.positions[id].x = pos.x + vel.x * t
         ecs.positions[id].y = pos.y + vel.y * t
 
 def collision_system(ecs):
-    for id in ecs.ids:
+    for id in ecs.ids():
         if not ecs.collidable[id]:
             continue
         

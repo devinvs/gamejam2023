@@ -16,6 +16,8 @@ class ECS:
     types = []
     # The width and height of the object and x,y position in world coordinates
     positions = []
+    # The color of the rectangle
+    colors = []
     # The x,y velocity of the object
     velocities = []
     # A set of the objects that we have collided with
@@ -39,6 +41,7 @@ class ECS:
     def new_entity(self):
         self.types.append(None)
         self.positions.append(None)
+        self.colors.append(None)
         self.velocities.append(None)
         self.collisions.append(None)
         self.healths.append(None)
@@ -54,6 +57,7 @@ class ECS:
     def remove_entity(self, id):
         self.types[id] = None
         self.positions[id] = None
+        self.colors[id] = None
         self.velocities[id] = None
         self.collisions[id] = None
         self.healths[id] = None
@@ -67,6 +71,7 @@ class ECS:
         for id in self.delete:
             del self.types[id]
             del self.positions[id]
+            del self.colors[id]
             del self.velocities[id]
             del self.collisions[id]
             del self.healths[id]
