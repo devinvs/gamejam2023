@@ -1,7 +1,7 @@
 import pygame
 
 from ecs import ECS
-from physics import position_system
+from physics import position_system, collision_system
 
 class GameEngine:
 
@@ -44,6 +44,7 @@ class GameEngine:
     def tick(self):
         self.clock.tick(60)
         position_system(self.ecs, 1)
+        collision_system(self.ecs)
     
     # Rendering helpers and main function
     def draw_text(self, x, y, text):

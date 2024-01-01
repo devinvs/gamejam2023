@@ -15,14 +15,19 @@ def collision_system(ecs):
     for id in ecs.ids():
         if not ecs.collidable[id]:
             continue
-        
+
+        ecs.collisions[id] = set([])
         pos = ecs.positions[id]
 
-        for other in ecs.ids:
+        for other in ecs.ids():
             if not ecs.collidable[other] or id == other:
                 continue
             
             pos_other = ecs.positions[other]
 
-            if pos.collidetect(pos_other):
-                ecs.collisions[id].add(pos_other)
+            if pos.colliderect(pos_other):
+                ecs.collisions[id].add(other)
+                #Test collisions
+                print("Collision Detected")
+                ecs.colors[id] = "Blue"
+                ecs.colors[other] = "Blue"
