@@ -2,10 +2,17 @@ import pygame
 
 def position_system(ecs, t):
     for id in ecs.ids():
-        vel = ecs.velocities[id]
         pos = ecs.positions[id]
 
-        if vel is None or pos is None:
+        if pos is None:
+            continue
+
+        ecs.geometries[id].x = ecs.positions[id].x
+        ecs.geometries[id].y = ecs.positions[id].y
+        
+        vel = ecs.velocities[id]
+
+        if vel is None:
             continue
 
         ecs.positions[id].x = pos.x + vel.x * t
