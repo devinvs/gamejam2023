@@ -63,22 +63,23 @@ class GameEngine:
 
     def handle_input(self):
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.mouse_pos = pygame.mouse.get_pos()
-            if event.type == pygame.QUIT:
-                self.running = False
-            if event.type == pygame.MOUSEBUTTONUP:
+            match event.type:
+                case pygame.MOUSEBUTTONDOWN:
+                    self.mouse_pos = pygame.mouse.get_pos()
+                case pygame.QUIT:
+                    self.running = False
+                case pygame.MOUSEBUTTONUP:
                 # if the mouse went down and up on the same button thats a click
-                up_pos = pygame.mouse.get_pos()
+                    up_pos = pygame.mouse.get_pos()
 
-                for (rect, _, _, action) in self.ui:
-                    if rect.collidepoint(self.mouse_pos) and rect.collidepoint(up_pos):
-                        if action is not None:
-                            action(self)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.ui = pause_screen
-                    self.paused = True
+                    for (rect, _, _, action) in self.ui:
+                        if rect.collidepoint(self.mouse_pos) and rect.collidepoint(up_pos):
+                            if action is not None:
+                                action(self)
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.ui = pause_screen
+                        self.paused = True
                 
     
     def tick(self):
