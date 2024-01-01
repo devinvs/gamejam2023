@@ -105,28 +105,28 @@ class ECS:
     def add_turret(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
-        self.colors[id] = (255, 255, 0)
+        self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
+        self.colors[id] = (0, 255, 0)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 
     def add_heavy(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
-        self.colors[id] = (255, 255, 0)
+        self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
+        self.colors[id] = (0, 255, 255)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 
     def add_fire(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
-        self.colors[id] = (255, 255, 0)
+        self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
+        self.colors[id] = (255, 0, 0)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 
     def add_ice(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 3.0, 3.0)
-        self.colors[id] = (255, 255, 0)
+        self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
+        self.colors[id] = (0, 0, 255)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 

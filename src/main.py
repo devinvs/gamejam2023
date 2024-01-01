@@ -20,19 +20,27 @@ def click_grid(engine):
     y = engine.mouse_pos[1]
 
     if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None:
-        
-        id = engine.ecs.new_entity()
-        engine.ecs.positions[id] = pygame.Vector2(x - x % 40 + 5, y - y % 40 + 5)
-        engine.ecs.geometries[id] = pygame.Rect(0, 0, 30.0, 30.0)
-        engine.ecs.colors[id] = (255, 0, 0)
+        match engine.unit_bought:
+            case "TURRET":
+                id = engine.ecs.add_turret(x - x % 40 + 5, y - y % 40 + 5)
+                engine.bank -= 1
+            case "HEAVY":
+                id = engine.ecs.add_heavy(x - x % 40 + 5, y - y % 40 + 5)
+                engine.bank -= 3
+            case "FIRE":
+                id = engine.ecs.add_fire(x - x % 40 + 5, y - y % 40 + 5)
+                engine.bank -= 4
+            case "ICE":
+                id = engine.ecs.add_ice(x - x % 40 + 5, y - y % 40 + 5)
+                engine.bank -= 2
         
         engine.entity_map[y // 40][x // 40] = id
         engine.unit_bought = None
 
-def click_unit(unit):
+def click_unit(unit, cost):
     def inner(engine):
-        engine.unit_bought = unit
-        print(engine.unit_bought)
+        if engine.bank >= cost:
+            engine.unit_bought = unit
     
     return inner
 
@@ -47,12 +55,14 @@ pause_screen = [
 ]
 
 game_screen = [
+
     (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
-    (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "You have no money :_(", None),
-    (pygame.Rect(740, 540, 40, 40), (255, 0, 0), "4", click_unit("ICE")),
-    (pygame.Rect(680, 540, 40, 40), (0, 255, 0), "3", click_unit("FIRE")),
-    (pygame.Rect(620, 540, 40, 40), (0, 0, 255), "2", click_unit("HEAVY")),
-    (pygame.Rect(560, 540, 40, 40), (0, 255, 255), "1", click_unit("TURRET"))
+    (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "", None),
+    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "$2", click_unit("ICE", 2)),
+    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "$4", click_unit("FIRE", 4)),
+    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "$3", click_unit("HEAVY", 3)),
+    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "$1", click_unit("TURRET", 1))
+
 ]
 
 
@@ -65,6 +75,7 @@ class GameEngine:
     mouse_pos = None
     running = True
     paused = True
+    bank = 10
     unit_bought = None
     entity_map = [[None for _ in range(20)] for _ in range(13)]
 
@@ -175,6 +186,7 @@ class GameEngine:
 
         
         self.draw_ui()
+        self.draw_text(40, 560, "Bank: " + str(self.bank), "Black")
         pygame.display.flip()
 
     # Draw the ui of the screen
