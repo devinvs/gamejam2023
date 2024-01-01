@@ -78,8 +78,12 @@ class GameEngine:
                                 action(self)
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.ui = pause_screen
-                        self.paused = True
+                        if self.ui is game_screen:
+                            self.ui = pause_screen
+                            self.paused = True
+                        elif self.ui is pause_screen:
+                            self.ui = game_screen
+                            self.paused = False
                 
     
     def tick(self):
