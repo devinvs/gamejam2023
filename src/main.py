@@ -5,6 +5,8 @@ from ecs import ECS
 from physics import position_system, collision_system
 from conveyor import conveyor_system, Conveyor
 from creatures import creature_system
+from turrets import turret_system
+from health import health_system
 
 
 # Here's a fun way to do UI:
@@ -146,9 +148,11 @@ class GameEngine:
         t = self.clock.tick() / 1000
         if not self.paused:
             creature_system(self.ecs)
+            turret_system(self.ecs)
             position_system(self.ecs, t)
             collision_system(self.ecs)
             conveyor_system(self.ecs)
+            health_system(self.ecs)
     
     # Rendering helpers and main function
     def draw_text(self, x, y, text, color):

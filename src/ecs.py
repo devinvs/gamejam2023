@@ -1,6 +1,6 @@
 import pygame
 
-from turret import Weapon
+from turrets import Weapon
 
 # The entity component system has no concept of a grid. Every object
 # is placed and referred to in world coordinates. Any handling of
@@ -65,7 +65,7 @@ class ECS:
     def remove_entity(self, id):
         self.positions[id] = None
         self.colors[id] = None
-        self.geometries = None
+        self.geometries[id] = None
         self.velocities[id] = None
         self.collisions[id] = None
         self.healths[id] = None
@@ -107,7 +107,7 @@ class ECS:
         self.positions[id] = pygame.Vector2(x, y)
         self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
         self.colors[id] = (0, 255, 0)
-        self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+        self.weapons[id] = Weapon(20.0, 200.0, 1.0)
 
     def add_heavy(self, x, y):
         id = self.new_entity()

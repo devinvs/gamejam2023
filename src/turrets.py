@@ -14,14 +14,15 @@ class Weapon:
 # them by spawning a bullet in the world
 def turret_system(ecs):
     for id in ecs.ids():
-        pos = ecs.position[id]
+        pos = ecs.positions[id]
         w = ecs.weapons[id]
 
-        if type is None or w is None or pos is None:
+        if w is None or pos is None:
             continue
 
+
         # If we have fired recently wait for our cooldown
-        if w.last_fired - time.monotonic() - w.cooldown <= 0.0:
+        if time.monotonic() - w.last_fired - w.cooldown <= 0.0:
             continue
 
         # Find creatures within the radius, choose a random one,
@@ -35,15 +36,18 @@ def turret_system(ecs):
             if opos is None or health is None or health <= 0.0:
                 continue
 
-            if (pos.x-opos.x)**2 + (pos.y-opos.y)**2 < radius**2:
+            if (pos.x-opos.x)**2 + (pos.y-opos.y)**2 < w.radius**2:
                 cs.append((other, opos))
+
+        if len(cs) == 0:
+            continue
 
         # Choose a rando
         (other, opos) = random.choice(cs)
 
         # Fire!!!
-        v = (opos - pos).normalize()
+        v = (opos - pos).normalize() * 50
 
-        ecs.spawn_bullet(pos.x, pos.y, v.x, v.y, w.damage)
+        ecs.add_bullet(pos.x, pos.y, v.x, v.y, w.damage)
         ecs.weapons[id].last_fired = time.monotonic()
 
