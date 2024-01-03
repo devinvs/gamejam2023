@@ -1,6 +1,7 @@
 import pygame
 
 from turrets import Weapon
+from conveyor import Conveyor
 
 # The entity component system has no concept of a grid. Every object
 # is placed and referred to in world coordinates. Any handling of
@@ -18,6 +19,8 @@ class ECS:
     positions = []
     # The color of the rectangle
     colors = []
+    # Texture
+    textures = []
     # Geometries (rectangles) Real pixel coordinates of the rectangle
     geometries = []
     # The x,y velocity of the object
@@ -47,6 +50,7 @@ class ECS:
     def new_entity(self):
         self.positions.append(None)
         self.colors.append(None)
+        self.textures.append(None)
         self.geometries.append(None)
         self.velocities.append(None)
         self.collisions.append(None)
@@ -65,6 +69,7 @@ class ECS:
     def remove_entity(self, id):
         self.positions[id] = None
         self.colors[id] = None
+        self.textures[id] = None
         self.geometries[id] = None
         self.velocities[id] = None
         self.collisions[id] = None
@@ -83,6 +88,10 @@ class ECS:
         self.colors[id] = (255, 0, 0)
         self.collidable[id] = True
         self.conveyors[id] = dir
+
+        if dir == Conveyor.RIGHT:
+            self.textures[id] = pygame.image.load("./assets/conv_right.png").convert()
+            self.colors[id] = None
 
     def add_creature(self, x, y, health):
         id = self.new_entity()

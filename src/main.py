@@ -181,12 +181,17 @@ class GameEngine:
 
         for id in self.ecs.ids():
             rect = self.ecs.geometries[id]
+            texture = self.ecs.textures[id]
             color = self.ecs.colors[id]
 
-            if rect is None or color is None:
+            if rect is None:
                 continue
 
-            pygame.draw.rect(self.screen, color, rect)
+            if color is not None:
+                pygame.draw.rect(self.screen, color, rect)
+
+            if texture is not None:
+                self.screen.blit(texture, rect)
 
         
         self.draw_ui()
