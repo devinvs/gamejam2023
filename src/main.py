@@ -1,6 +1,7 @@
 from enum import Enum
 import pygame
 
+from textures import TextureCache
 from ecs import ECS
 from physics import position_system, collision_system
 from conveyor import conveyor_system, Conveyor
@@ -72,6 +73,7 @@ victory_screen = []
 
 
 class GameEngine:
+    tc = TextureCache()
     screen = pygame.display.set_mode((800, 600), pygame.SCALED | pygame.RESIZABLE)
     clock = pygame.time.Clock()
     mouse_pos = None
@@ -89,7 +91,7 @@ class GameEngine:
         self.ecs = ECS()
         # Load entitities for testing (optional)
         
-        # self.add_conveyor(EntityType.CONV_RIGHT, 0, 4)
+        # self.add_conveyor(EntityType.CONV_RIGHT, 0, 4, self.tc)
         # self.add_conveyor(EntityType.CONV_RIGHT, 1, 4)
         # self.add_conveyor(EntityType.CONV_RIGHT, 2, 4)
         # self.add_conveyor(EntityType.CONV_RIGHT, 3, 4)
@@ -100,7 +102,7 @@ class GameEngine:
         # self.add_conveyor(EntityType.CONV_LEFT, 5, 7)
         # self.add_conveyor(EntityType.CONV_UP, 10, 10)
 
-        self.ecs.add_conveyor(80, 80, Conveyor.RIGHT)
+        self.ecs.add_conveyor(80, 80, Conveyor.RIGHT, self.tc)
         # self.ecs.add_conveyor(100, 80, Conveyor.DOWN)
         # self.ecs.add_conveyor(100, 100, Conveyor.LEFT)
         # self.ecs.add_conveyor(80, 100, Conveyor.UP)

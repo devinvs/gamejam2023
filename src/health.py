@@ -16,8 +16,6 @@ def health_system(ecs):
                 health -= dmg
                 ecs.remove_entity(other)
 
-        print("health=", health)
-
         # If health is <= 0 we die, else just set the health
         if health <= 0:
             ecs.remove_entity(id)

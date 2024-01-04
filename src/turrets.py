@@ -1,6 +1,9 @@
 import time
 from dataclasses import dataclass
 import random
+import math
+
+BULLET_SPEED = 80
 
 @dataclass
 class Weapon:
@@ -44,10 +47,27 @@ def turret_system(ecs):
 
         # Choose a rando
         (other, opos) = random.choice(cs)
+        ovel = ecs.velocities[other]
 
-        # Fire!!!
-        v = (opos - pos).normalize() * 50
+        tx = opos.x - pos.x
+        ty = opos.y - pos.y
+        vx = ovel.x
+        vy = ovel.y
 
-        ecs.add_bullet(pos.x, pos.y, v.x, v.y, w.damage)
-        ecs.weapons[id].last_fired = time.monotonic()
+        try:
+            rcrossv = tx * vy - ty * vx
+            magr = math.sqrt(tx*tx + ty*ty)
+            angle_adjust = math.asin(rcrossv / (BULLET_SPEED * magr))
+
+            angle = angle_adjust + math.atan2(ty, tx)
+
+            vx = BULLET_SPEED * math.cos(angle)
+            vy = BULLET_SPEED * math.sin(angle)
+
+            # Fire!
+            ecs.add_bullet(pos.x, pos.y, vx, vy, w.damage)
+            ecs.weapons[id].last_fired = time.monotonic()
+        except:
+            # Domain error, no solutions
+            pass
 

@@ -81,16 +81,16 @@ class ECS:
 
         self.delete.add(id)
 
-    def add_conveyor(self, x, y, dir):
+    def add_conveyor(self, x, y, dir, tc):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 20, 20)
+        self.geometries[id] = pygame.Rect(x, y, 40, 40)
         self.colors[id] = (255, 0, 0)
         self.collidable[id] = True
         self.conveyors[id] = dir
 
         if dir == Conveyor.RIGHT:
-            self.textures[id] = pygame.image.load("./assets/conv_right.png").convert()
+            self.textures[id] = tc.load("./assets/conv_right.png", (40, 40)).convert()
             self.colors[id] = None
 
     def add_creature(self, x, y, health):
@@ -116,7 +116,7 @@ class ECS:
         self.positions[id] = pygame.Vector2(x, y)
         self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
         self.colors[id] = (0, 255, 0)
-        self.weapons[id] = Weapon(20.0, 200.0, 1.0)
+        self.weapons[id] = Weapon(20.0, 1000.0, 1.0)
 
     def add_heavy(self, x, y):
         id = self.new_entity()
