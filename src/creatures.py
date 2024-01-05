@@ -12,8 +12,11 @@ def creature_system(ecs):
         return
 
     # Spawn
+    x = random.randrange(0, 800)
+    y = random.randrange(0, 600)
     health = random.randrange(5, 20)
-    ecs.add_creature(50, 50, health)
+    ecs.add_creature(x, y, health)
+    
 
     # Set delay
     delay = random.uniform(1.0, 6.0)

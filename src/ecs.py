@@ -86,46 +86,52 @@ class ECS:
 
         self.delete.add(id)
 
-    def add_conveyor(self, x, y, dir, tc):
+    def add_conveyor(self, x, y, dir):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 40, 40)
+        self.geometries[id] = pygame.Rect(x, y, 50, 50)
         self.collidable[id] = True
         self.conveyors[id] = dir
 
         if dir == Conveyor.RIGHT:
             self.animations[id] = Animation([
-                tc.load("./assets/belth/frame_1.png", (40, 40)),
-                tc.load("./assets/belth/frame_2.png", (40, 40)),
-                tc.load("./assets/belth/frame_3.png", (40, 40)),
+                ("./assets/belth/frame_1.png", (70, 70), (10, 15)),
+                ("./assets/belth/frame_2.png", (70, 70), (10, 15)),
+                ("./assets/belth/frame_3.png", (70, 70), (10, 15)),
             ], 0.2, True)
         elif dir == Conveyor.LEFT:
             self.animations[id] = Animation([
-                tc.load("./assets/belth/frame_3.png", (40, 40)),
-                tc.load("./assets/belth/frame_2.png", (40, 40)),
-                tc.load("./assets/belth/frame_1.png", (40, 40)),
+                ("./assets/belth/frame_3.png", (60, 60), (5, 8)),
+                ("./assets/belth/frame_2.png", (60, 60), (5, 8)),
+                ("./assets/belth/frame_1.png", (60, 60), (5, 8)),
             ], 0.2, True)
         elif dir == Conveyor.UP:
             self.animations[id] = Animation([
-                tc.load("./assets/beltv/frame_1.png", (40, 40)),
-                tc.load("./assets/beltv/frame_2.png", (40, 40)),
-                tc.load("./assets/beltv/frame_3.png", (40, 40)),
+                ("./assets/beltv/frame_1.png", (60, 60), (5, 8)),
+                ("./assets/beltv/frame_2.png", (60, 60), (5, 8)),
+                ("./assets/beltv/frame_3.png", (60, 60), (5, 8)),
             ], 0.2, True)
         elif dir == Conveyor.DOWN:
             self.animations[id] = Animation([
-                tc.load("./assets/beltv/frame_3.png", (40, 40)),
-                tc.load("./assets/beltv/frame_2.png", (40, 40)),
-                tc.load("./assets/beltv/frame_1.png", (40, 40)),
+                ("./assets/beltv/frame_3.png", (60, 60), (5, 8)),
+                ("./assets/beltv/frame_2.png", (60, 60), (5, 8)),
+                ("./assets/beltv/frame_1.png", (60, 60), (5, 8)),
             ], 0.2, True)
+
+        return id
 
     def add_creature(self, x, y, health):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 10.0, 10.0)
-        self.colors[id] = (0, 0, 255)
+        self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
         self.velocities[id] = pygame.math.Vector2(0, 0)
         self.collidable[id] = True
         self.healths[id] = health
+        self.animations[id] = Animation([
+            ("./assets/chicken/frame_01.png", (90, 90), (27, 27)),
+        ], 0.2, True)
+
+        return id
         
     def add_bullet(self, x, y, vx, vy, dmg):
         id = self.new_entity()
@@ -136,12 +142,16 @@ class ECS:
         self.collidable[id] = True
         self.damages[id] = dmg
 
+        return id
+
     def add_turret(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
         self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
-        self.colors[id] = (0, 255, 0)
         self.weapons[id] = Weapon(20.0, 1000.0, 1.0)
+        self.textures[id] = ("./assets/penguin/frame_01.png", (40, 40), None)
+
+        return id
 
     def add_heavy(self, x, y):
         id = self.new_entity()
@@ -150,6 +160,8 @@ class ECS:
         self.colors[id] = (0, 255, 255)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 
+        return id
+
     def add_fire(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
@@ -157,10 +169,14 @@ class ECS:
         self.colors[id] = (255, 0, 0)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
 
+        return id
+
     def add_ice(self, x, y):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
         self.geometries[id] = pygame.Rect(x, y, 30.0, 30.0)
         self.colors[id] = (0, 0, 255)
         self.weapons[id] = Weapon(2.0, 5.0, 1.0)
+
+        return id
 

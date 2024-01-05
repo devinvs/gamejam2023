@@ -43,11 +43,11 @@ def conveyor_system(ecs):
             if ecs.velocities[other].x != 0 or ecs.velocities[other].y != 0:
                 if dir==Conveyor.RIGHT or dir==Conveyor.LEFT:
                     # y is orthogonal
-                    if abs(centery-ocentery) > 2:
+                    if abs(centery-ocentery) > 0:
                         continue
                 else:
                     # x is orthogonal
-                    if abs(centerx-ocenterx) > 2:
+                    if abs(centerx-ocenterx) > 0:
                         continue
 
            

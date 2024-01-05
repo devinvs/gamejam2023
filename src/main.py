@@ -42,12 +42,12 @@ class GameEngine:
         # self.add_conveyor(EntityType.CONV_LEFT, 5, 7)
         # self.add_conveyor(EntityType.CONV_UP, 10, 10)
 
-        self.ecs.add_conveyor(80, 80, Conveyor.RIGHT, self.tc)
+        # self.ecs.add_conveyor(80, 80, Conveyor.RIGHT)
         # self.ecs.add_conveyor(100, 80, Conveyor.DOWN)
         # self.ecs.add_conveyor(100, 100, Conveyor.LEFT)
         # self.ecs.add_conveyor(80, 100, Conveyor.UP)
 
-        self.ecs.add_creature(85, 85, 10)
+        # self.ecs.add_creature(85, 85, 10)
         
         # Load font(s)
         self.font = pygame.freetype.Font('./assets/russo.ttf', 24)
@@ -102,7 +102,7 @@ class GameEngine:
         self.font.render_to(self.screen, (x, y), text, color)
 
     def draw_grid(self):
-        w = 40
+        w = ui.GRID_SIZE
         nc = 800 // w
         nr = 600 // w
 
@@ -134,7 +134,15 @@ class GameEngine:
                 pygame.draw.rect(self.screen, color, rect)
 
             if texture is not None:
-                self.screen.blit(texture, rect)
+                (path, size, off) = texture
+                tex = self.tc.load(path, size)
+
+                if off is not None:
+                    rect = rect.copy()
+                    rect.x -= off[0]
+                    rect.y -= off[1]
+                
+                self.screen.blit(tex, rect)
 
         
         self.draw_ui()

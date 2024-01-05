@@ -2,6 +2,8 @@ import pygame
 
 from conveyor import Conveyor
 
+GRID_SIZE = 50
+
 # Here's a fun way to do UI:
 # Each screen is just a list of tuples, where each
 # tuple is a rect, a color, some text, and an action!
@@ -15,34 +17,35 @@ def click_edit(engine):
     engine.paused = False
 
 def click_grid(engine):
+    gs = GRID_SIZE
     x = engine.mouse_pos[0]
     y = engine.mouse_pos[1]
 
-    if engine.unit_bought is not None and engine.entity_map[y // 40][x // 40] is None:
+    if engine.unit_bought is not None and engine.entity_map[y // gs][x // gs] is None:
         match engine.unit_bought:
             case "TURRET":
-                id = engine.ecs.add_turret(x - x % 40 + 5, y - y % 40 + 5)
+                id = engine.ecs.add_turret(x - x % gs + 5, y - y % gs + 5)
                 engine.bank -= 1
             case "HEAVY":
-                id = engine.ecs.add_heavy(x - x % 40 + 5, y - y % 40 + 5)
+                id = engine.ecs.add_heavy(x - x % gs + 5, y - y % gs + 5)
                 engine.bank -= 3
             case "FIRE":
-                id = engine.ecs.add_fire(x - x % 40 + 5, y - y % 40 + 5)
+                id = engine.ecs.add_fire(x - x % gs + 5, y - y % gs + 5)
                 engine.bank -= 4
             case "ICE":
-                id = engine.ecs.add_ice(x - x % 40 + 5, y - y % 40 + 5)
+                id = engine.ecs.add_ice(x - x % gs + 5, y - y % gs + 5)
                 engine.bank -= 2
             case "UP":
-                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.UP, engine.tc)
-                print("UP")
+                id = engine.ecs.add_conveyor(x - x % gs, y - y % gs, Conveyor.UP)
             case "DOWN":
-                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.DOWN, engine.tc)
+                id = engine.ecs.add_conveyor(x - x % gs, y - y % gs, Conveyor.DOWN)
             case "LEFT":
-                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.LEFT, engine.tc)
+                id = engine.ecs.add_conveyor(x - x % gs, y - y % gs, Conveyor.LEFT)
             case "RIGHT":
-                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.RIGHT, engine.tc)
+                id = engine.ecs.add_conveyor(x - x % gs, y - y % gs, Conveyor.RIGHT)
         
-        engine.entity_map[y // 40][x // 40] = id
+        print(id)
+        engine.entity_map[y // gs][x // gs] = id
         engine.unit_bought = None
 
 def click_unit(unit, cost):
