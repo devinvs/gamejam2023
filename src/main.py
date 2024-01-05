@@ -19,6 +19,10 @@ def click_play(engine):
     engine.ui = game_screen
     engine.paused = False
 
+def click_edit(engine):
+    engine.ui = map_editor
+    engine.paused = False
+
 def click_grid(engine):
     x = engine.mouse_pos[0]
     y = engine.mouse_pos[1]
@@ -37,6 +41,15 @@ def click_grid(engine):
             case "ICE":
                 id = engine.ecs.add_ice(x - x % 40 + 5, y - y % 40 + 5)
                 engine.bank -= 2
+            case "UP":
+                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.UP, engine.tc)
+                print("UP")
+            case "DOWN":
+                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.DOWN, engine.tc)
+            case "LEFT":
+                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.LEFT, engine.tc)
+            case "RIGHT":
+                id = engine.ecs.add_conveyor(x - x % 40, y - y % 40, Conveyor.RIGHT, engine.tc)
         
         engine.entity_map[y // 40][x // 40] = id
         engine.unit_bought = None
@@ -48,10 +61,20 @@ def click_unit(unit, cost):
     
     return inner
 
+map_editor = [
+    (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
+    (pygame.Rect(0, 520, 800, 80), (230, 150, 230), "", None),
+    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "R", click_unit("RIGHT", 0)),
+    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "L", click_unit("LEFT", 0)),
+    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "D", click_unit("DOWN", 0)),
+    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "U", click_unit("UP", 0))
+]
+
 title_screen = [
     (pygame.Rect(0, 0, 800, 600), (200, 200, 200), "", None),
     (pygame.Rect(200, 200, 200, 20), (255, 0, 0), "GameNameHere", None),
-    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play)
+    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play),
+    (pygame.Rect(400, 450, 200, 20), (0, 255, 0), "MAP", click_edit)
 ]
 
 pause_screen = [
