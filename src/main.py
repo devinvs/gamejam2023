@@ -1,4 +1,5 @@
 from enum import Enum
+import os
 import pygame
 
 from textures import TextureCache
@@ -60,11 +61,11 @@ pause_screen = [
 game_screen = [
 
     (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
-    (pygame.Rect(0, 520, 800, 80), (200, 200, 200), "", None),
-    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "$2", click_unit("ICE", 2)),
-    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "$4", click_unit("FIRE", 4)),
-    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "$3", click_unit("HEAVY", 3)),
-    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "$1", click_unit("TURRET", 1))
+    (pygame.Rect(0, 520, 800, 80), (230, 150, 230), "", None),
+    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "2", click_unit("ICE", 2)),
+    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "4", click_unit("FIRE", 4)),
+    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "3", click_unit("HEAVY", 3)),
+    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "1", click_unit("TURRET", 1))
 
 ]
 
@@ -197,7 +198,8 @@ class GameEngine:
 
         
         self.draw_ui()
-        self.draw_text(40, 560, "Bank: " + str(self.bank), "Black")
+        if self.ui == (game_screen or pause_screen):
+            self.draw_text(40, 560, "Disney Princess Power: " + str(self.bank), "Light Blue")
         pygame.display.flip()
 
     # Draw the ui of the screen
