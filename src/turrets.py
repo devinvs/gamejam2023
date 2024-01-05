@@ -17,7 +17,7 @@ class Weapon:
 # them by spawning a bullet in the world
 def turret_system(ecs):
     for id in ecs.ids():
-        pos = ecs.positions[id]
+        pos = ecs.geometries[id]
         w = ecs.weapons[id]
 
         if w is None or pos is None:
@@ -33,7 +33,7 @@ def turret_system(ecs):
         cs = []
 
         for other in ecs.ids():
-            opos = ecs.positions[other]
+            opos = ecs.geometries[other]
             health = ecs.healths[other]
 
             if opos is None or health is None or health <= 0.0:
@@ -49,8 +49,8 @@ def turret_system(ecs):
         (other, opos) = random.choice(cs)
         ovel = ecs.velocities[other]
 
-        tx = opos.x - pos.x
-        ty = opos.y - pos.y
+        tx = opos.centerx - pos.centerx
+        ty = opos.centery - pos.centery
         vx = ovel.x
         vy = ovel.y
 
@@ -65,7 +65,7 @@ def turret_system(ecs):
             vy = BULLET_SPEED * math.sin(angle)
 
             # Fire!
-            ecs.add_bullet(pos.x, pos.y, vx, vy, w.damage)
+            ecs.add_bullet(pos.centerx, pos.centery, vx, vy, w.damage)
             ecs.weapons[id].last_fired = time.monotonic()
         except:
             # Domain error, no solutions

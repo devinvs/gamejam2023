@@ -2,6 +2,7 @@ import pygame
 
 from turrets import Weapon
 from conveyor import Conveyor
+from animation import Animation
 
 # The entity component system has no concept of a grid. Every object
 # is placed and referred to in world coordinates. Any handling of
@@ -37,6 +38,8 @@ class ECS:
     conveyors = []
     # All the weapon stats
     weapons = []
+    # All the animations
+    animations = []
 
     def __init__(self):
         return
@@ -59,6 +62,7 @@ class ECS:
         self.collidable.append(False)
         self.conveyors.append(None)
         self.weapons.append(None)
+        self.animations.append(None)
 
         me = self.next_id
         self.next_id += 1
@@ -78,6 +82,7 @@ class ECS:
         self.collidable[id] = False
         self.conveyors[id] = None
         self.weapons[id] = None
+        self.animations[id] = None
 
         self.delete.add(id)
 
@@ -85,13 +90,33 @@ class ECS:
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
         self.geometries[id] = pygame.Rect(x, y, 40, 40)
-        self.colors[id] = (255, 0, 0)
         self.collidable[id] = True
         self.conveyors[id] = dir
 
         if dir == Conveyor.RIGHT:
-            self.textures[id] = tc.load("./assets/conv_right.png", (40, 40)).convert()
-            self.colors[id] = None
+            self.animations[id] = Animation([
+                tc.load("./assets/belth/frame_1.png", (40, 40)),
+                tc.load("./assets/belth/frame_2.png", (40, 40)),
+                tc.load("./assets/belth/frame_3.png", (40, 40)),
+            ], 0.2, True)
+        elif dir == Conveyor.LEFT:
+            self.animations[id] = Animation([
+                tc.load("./assets/belth/frame_3.png", (40, 40)),
+                tc.load("./assets/belth/frame_2.png", (40, 40)),
+                tc.load("./assets/belth/frame_1.png", (40, 40)),
+            ], 0.2, True)
+        elif dir == Conveyor.UP:
+            self.animations[id] = Animation([
+                tc.load("./assets/beltv/frame_1.png", (40, 40)),
+                tc.load("./assets/beltv/frame_2.png", (40, 40)),
+                tc.load("./assets/beltv/frame_3.png", (40, 40)),
+            ], 0.2, True)
+        elif dir == Conveyor.DOWN:
+            self.animations[id] = Animation([
+                tc.load("./assets/beltv/frame_3.png", (40, 40)),
+                tc.load("./assets/beltv/frame_2.png", (40, 40)),
+                tc.load("./assets/beltv/frame_1.png", (40, 40)),
+            ], 0.2, True)
 
     def add_creature(self, x, y, health):
         id = self.new_entity()

@@ -11,8 +11,6 @@ def creature_system(ecs):
     if time.monotonic() - last_spawn - delay <= 0.0:
         return
 
-    print("letsago")
-
     # Spawn
     health = random.randrange(5, 20)
     ecs.add_creature(50, 50, health)

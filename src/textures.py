@@ -8,7 +8,7 @@ class TextureCache:
             s = pygame.image.load(path)
             if size is not None:
                 s = pygame.transform.scale(s, size)
-            self.textures[path] = s.convert()
+            self.textures[path] = s.convert_alpha()
 
         return self.textures[path]
      
