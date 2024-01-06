@@ -9,7 +9,7 @@ from animation import Animation
 # the grid should be done at a layer that is above the ecs
 class ECS:
     next_id = 0
-    # list of ids to delete at next flush
+    # list of ids that are free to reclaim
     delete = set([])
 
     #
@@ -51,21 +51,26 @@ class ECS:
     # Create a new entity where each component is set to None,
     # returns the index into the component arrays of that entity
     def new_entity(self):
-        self.positions.append(None)
-        self.colors.append(None)
-        self.textures.append(None)
-        self.geometries.append(None)
-        self.velocities.append(None)
-        self.collisions.append(None)
-        self.healths.append(None)
-        self.damages.append(None)
-        self.collidable.append(False)
-        self.conveyors.append(None)
-        self.weapons.append(None)
-        self.animations.append(None)
+        me = 0
 
-        me = self.next_id
-        self.next_id += 1
+        if len(self.delete) > 0:
+            me = self.delete.pop()
+        else:
+            me = self.next_id
+            self.next_id += 1
+            self.positions.append(None)
+            self.colors.append(None)
+            self.textures.append(None)
+            self.geometries.append(None)
+            self.velocities.append(None)
+            self.collisions.append(None)
+            self.healths.append(None)
+            self.damages.append(None)
+            self.collidable.append(False)
+            self.conveyors.append(None)
+            self.weapons.append(None)
+            self.animations.append(None)
+
         return me
 
     # Delete an entity. Just overwrites with Nones and adds to
