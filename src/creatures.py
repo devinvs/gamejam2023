@@ -19,6 +19,6 @@ def creature_system(ecs):
     
 
     # Set delay
-    delay = random.uniform(1.0, 6.0)
+    delay = random.uniform(0.2, 100.0)
     last_spawn = time.monotonic()
     

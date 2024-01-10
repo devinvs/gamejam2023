@@ -54,8 +54,10 @@ class ECS:
         me = 0
 
         if len(self.delete) > 0:
+            print(self.delete)
             me = self.delete.pop()
         else:
+            print(self.next_id)
             me = self.next_id
             self.next_id += 1
             self.positions.append(None)
@@ -94,15 +96,15 @@ class ECS:
     def add_conveyor(self, x, y, dir):
         id = self.new_entity()
         self.positions[id] = pygame.Vector2(x, y)
-        self.geometries[id] = pygame.Rect(x, y, 50, 50)
+        self.geometries[id] = pygame.Rect(x, y, 220, 220)
         self.collidable[id] = True
         self.conveyors[id] = dir
 
         if dir == Conveyor.RIGHT:
             self.animations[id] = Animation([
-                ("./assets/belth/frame_1.png", (70, 70), (10, 15)),
-                ("./assets/belth/frame_2.png", (70, 70), (10, 15)),
-                ("./assets/belth/frame_3.png", (70, 70), (10, 15)),
+                ("./assets/belth/frame_1.png", (220, 220), (10, 15)),
+                ("./assets/belth/frame_2.png", (220, 220), (10, 15)),
+                ("./assets/belth/frame_3.png", (220, 220), (10, 15)),
             ], 0.2, True)
         elif dir == Conveyor.LEFT:
             self.animations[id] = Animation([
@@ -133,7 +135,7 @@ class ECS:
         self.collidable[id] = True
         self.healths[id] = health
         self.animations[id] = Animation([
-            ("./assets/chicken/frame_01.png", (90, 90), (27, 27)),
+            ("./assets/chicken/frame_01.png", (400, 400), (27, 27)),
         ], 0.2, True)
 
         return id

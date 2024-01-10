@@ -11,10 +11,11 @@ from creatures import creature_system
 from turrets import turret_system
 from health import health_system
 from animation import animation_system
+from cleanup import cleanup_system
 
 class GameEngine:
     tc = TextureCache()
-    screen = pygame.display.set_mode((800, 600), pygame.SCALED | pygame.RESIZABLE)
+    screen = pygame.display.set_mode((3840, 2160), flags=pygame.FULLSCREEN)
     clock = pygame.time.Clock()
     mouse_pos = None
     running = True
@@ -96,6 +97,7 @@ class GameEngine:
             conveyor_system(self.ecs)
             health_system(self.ecs)
             animation_system(self.ecs)
+            cleanup_system(self.ecs)
     
     # Rendering helpers and main function
     def draw_text(self, x, y, text, color):
@@ -103,20 +105,17 @@ class GameEngine:
 
     def draw_grid(self):
         w = ui.GRID_SIZE
-        nc = 800 // w
-        nr = 600 // w
+        nc = 3840 // w
+        nr = 2160 // w
 
         for i in range(nr+1):
             y = i*w
-            pygame.draw.line(self.screen, "black", (0, y-1), (800, y-1))
-            pygame.draw.line(self.screen, "black", (0, y), (800, y))
+            pygame.draw.line(self.screen, "black", (0, y), (3840, y))
 
         for i in range(nc+1):
             x = i*w
-            pygame.draw.line(self.screen, "black", (x-1, 0), (x-1, 600))
-            pygame.draw.line(self.screen, "black", (x, 0), (x, 600))
-        
-        
+            pygame.draw.line(self.screen, "black", (x, 0), (x, 2160))
+                
  
     def draw(self):
         self.screen.fill("white")

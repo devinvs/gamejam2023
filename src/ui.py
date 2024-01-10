@@ -2,7 +2,7 @@ import pygame
 
 from conveyor import Conveyor
 
-GRID_SIZE = 50
+GRID_SIZE = 180
 
 # Here's a fun way to do UI:
 # Each screen is just a list of tuples, where each
@@ -44,7 +44,6 @@ def click_grid(engine):
             case "RIGHT":
                 id = engine.ecs.add_conveyor(x - x % gs, y - y % gs, Conveyor.RIGHT)
         
-        print(id)
         engine.entity_map[y // gs][x // gs] = id
         engine.unit_bought = None
 

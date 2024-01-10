@@ -2,6 +2,7 @@ import time
 from dataclasses import dataclass
 import random
 import math
+import ui
 
 BULLET_SPEED = 80
 
@@ -11,6 +12,8 @@ class Weapon:
     radius: float
     cooldown: float
     last_fired: float = 0
+
+
 
 # The turret system is responsible for
 # making the turret track creatures and fire upon
