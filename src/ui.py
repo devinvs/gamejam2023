@@ -1,5 +1,4 @@
 import pygame
-
 from conveyor import Conveyor
 
 GRID_SIZE = 180
@@ -54,36 +53,72 @@ def click_unit(unit, cost):
     
     return inner
 
-map_editor = [
-    (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
-    (pygame.Rect(0, 520, 800, 80), (230, 150, 230), "", None),
-    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "R", click_unit("RIGHT", 0)),
-    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "L", click_unit("LEFT", 0)),
-    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "D", click_unit("DOWN", 0)),
-    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "U", click_unit("UP", 0))
-]
+class UIBox:
 
-title_screen = [
-    (pygame.Rect(0, 0, 800, 600), (200, 200, 200), "", None),
-    (pygame.Rect(200, 200, 200, 20), (255, 0, 0), "GameNameHere", None),
-    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "PLAY", click_play),
-    (pygame.Rect(400, 450, 200, 20), (0, 255, 0), "MAP", click_edit)
-]
+    rect = None
+    color = None
+    texture = None
+    text = None
+    action = None
+    children = []
+    
+    def __init__(self, rect, color, texture, text, action, children) -> None:
+        self.rect = rect
+        self.color = color
+        self.texture = texture
+        self.text = text
+        self.action = action
+        self.children = children
 
-pause_screen = [
-    (pygame.Rect(400, 400, 200, 20), (0, 255, 0), "RESUME", click_play)
-]
+    def click(self, engine, mouse_pos):
+        if not self.rect.collidepoint(mouse_pos):
+            return False
+        
+        child_hit = False
+        
+        for child in self.children:
+            if child.click(engine, mouse_pos):
+                child_hit = True
+        
+        if not child_hit and self.action is not None:
+            self.action(engine)
 
-game_screen = [
+        return True
 
-    (pygame.Rect(0, 0, 800, 520), None, "", click_grid),
-    (pygame.Rect(0, 520, 800, 80), (230, 150, 230), "", None),
-    (pygame.Rect(740, 540, 40, 40), (0, 0, 255), "2", click_unit("ICE", 2)),
-    (pygame.Rect(680, 540, 40, 40), (255, 0, 0), "4", click_unit("FIRE", 4)),
-    (pygame.Rect(620, 540, 40, 40), (0, 255, 255), "3", click_unit("HEAVY", 3)),
-    (pygame.Rect(560, 540, 40, 40), (0, 255, 0), "1", click_unit("TURRET", 1))
+    def draw(self, screen, font):
+        if self.color is not None:
+            pygame.draw.rect(screen, self.color, self.rect)
+            font.render_to(screen, (self.rect.x, self.rect.y), self.text, self.color)
 
-]
+        for child in self.children:
+            child.draw(screen, font)
 
+map_editor = UIBox(pygame.Rect(0, 0, 800, 600), None, None, "", None, [
+    UIBox(pygame.Rect(0, 0, 800, 520), None, None, "", click_grid, []), 
+    UIBox(pygame.Rect(0, 520, 800, 80), (230, 150, 230), None, "", None, [
+        UIBox(pygame.Rect(740, 540, 40, 40), (0, 0, 255), None, "R", click_unit("RIGHT", 0), []),
+        UIBox(pygame.Rect(680, 540, 40, 40), (255, 0, 0), None, "L", click_unit("LEFT", 0), []),
+        UIBox(pygame.Rect(620, 540, 40, 40), (0, 255, 255), None, "D", click_unit("DOWN", 0), []),
+        UIBox(pygame.Rect(560, 540, 40, 40), (0, 255, 0), None, "U", click_unit("UP", 0), [])
+    ])
+])
+
+title_screen = UIBox(pygame.Rect(0, 0, 800, 600), (200, 200, 200), None, "", None, [
+    UIBox(pygame.Rect(200, 200, 200, 20), (255, 0, 0), None, "GameNameHere", None, []),
+    UIBox(pygame.Rect(400, 400, 200, 20), (0, 255, 0), None, "PLAY", click_play, []),
+    UIBox(pygame.Rect(400, 450, 200, 20), (0, 255, 0), None, "MAP", click_edit, [])
+])
+
+pause_screen = UIBox(pygame.Rect(400, 400, 200, 20), (0, 255, 0), None, "RESUME", click_play, [])
+
+game_screen = UIBox(pygame.Rect(0, 0, 800, 600), None, None, "", None, [
+    UIBox(pygame.Rect(0, 0, 800, 520), None, None, "", click_grid, []), 
+    UIBox(pygame.Rect(0, 520, 800, 80), (230, 150, 230), None, "", None, [
+        UIBox(pygame.Rect(740, 540, 40, 40), (0, 0, 255), None, "2", click_unit("ICE", 2), []),
+        UIBox(pygame.Rect(680, 540, 40, 40), (255, 0, 0), None, "4", click_unit("FIRE", 4), []),
+        UIBox(pygame.Rect(620, 540, 40, 40), (0, 255, 255), None, "3", click_unit("HEAVY", 3), []),
+        UIBox(pygame.Rect(560, 540, 40, 40), (0, 255, 0), None, "1", click_unit("TURRET", 1), [])
+    ])
+])
 
 victory_screen = []

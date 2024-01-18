@@ -73,10 +73,7 @@ class GameEngine:
                 # if the mouse went down and up on the same button thats a click
                     up_pos = pygame.mouse.get_pos()
 
-                    for (rect, _, _, action) in self.ui:
-                        if rect.collidepoint(self.mouse_pos) and rect.collidepoint(up_pos):
-                            if action is not None:
-                                action(self)
+                    self.ui.click(self, self.mouse_pos)
                 case pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         if self.ui is ui.game_screen:
@@ -144,19 +141,11 @@ class GameEngine:
                 self.screen.blit(tex, rect)
 
         
-        self.draw_ui()
+        self.ui.draw(self.screen, self.font)
         if self.ui == ui.game_screen or self.ui == ui.pause_screen:
             self.draw_text(40, 560, "Disney Princess Power: " + str(self.bank), "Light Blue")
         pygame.display.flip()
 
-    # Draw the ui of the screen
-    def draw_ui(self):
-        for (rect, color, text, _) in self.ui:
-            if color is None:
-                continue
-
-            pygame.draw.rect(self.screen, color, rect)
-            self.draw_text(rect.x, rect.y, text, (0, 0, 0))
         
 
 game1 = GameEngine()
