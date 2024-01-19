@@ -88,7 +88,8 @@ class UIBox:
     def draw(self, screen, font):
         if self.color is not None:
             pygame.draw.rect(screen, self.color, self.rect)
-            font.render_to(screen, (self.rect.x, self.rect.y), self.text, self.color)
+        tr = font.get_rect(self.text)
+        font.render_to(screen, (self.rect.x + (self.rect.w - tr.w)/2, self.rect.y + (self.rect.h - tr.h)/2), self.text, (0, 0, 0))
 
         for child in self.children:
             child.draw(screen, font)
